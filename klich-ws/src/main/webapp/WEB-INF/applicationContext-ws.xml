@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://cxf.apache.org/transports/http/configuration
+       http://cxf.apache.org/schemas/configuration/http-conf.xsd
+       http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+    <beans:import resource="classpath:META-INF/cxf/cxf.xml" />
+    <beans:import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+    <beans:import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+    <beans:bean id="klichWSLocal" class="net.softforlife.klich.ws.service.impl.KlichWSLocalImpl">
+        <!--property name="clientRemote" ref="clientSigueWS"/-->
+        <beans:property name="wsDataService" ref="wsDataService" />
+        <beans:property name="wSEmailSender" ref="wSEmailSender" />
+        <beans:property name="notificationService" ref="notificationService" />
+    </beans:bean>
+
+    <jaxws:endpoint id="klichWS" implementor="#klichWSLocal"
+             address="/klichWS" />
+
+    <!-- REMOTE 
+    <beans:bean id="sigueWSRemote" class="es.ine.ws.SigueWSRemote">
+        <beans:property name="wsDataService" ref="wsDataService" />
+    </beans:bean>
+
+    <jaxws:endpoint id="sigueWSR" implementor="#sigueWSRemote"
+                    address="/sigueWSR" />
+
+    <http-conf:conduit name="es.ine.ws.SigueWS">
+        <http-conf:client ReceiveTimeout="500000"/>
+    </http-conf:conduit>
+	-->
+</beans:beans>
+

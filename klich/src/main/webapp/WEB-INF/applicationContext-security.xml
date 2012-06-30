@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.6.xsd">
+
+	<http entry-point-ref="myAuthenticationEntryPoint" auto-config="false">
+		<intercept-url pattern="/login.xhtml*" filters="none"
+			access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_ANONYMOUS" />
+		<intercept-url pattern="/login.xhtml*" filters="none"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/resources/css/**" filters="none"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/resources/images/**" filters="none"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/resourses/js/**" filters="none"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<!--
+			intercept-url pattern="/ws/**" filters="none"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" /
+		-->
+		<intercept-url pattern="/pages/surveydata/**" access="ROLE_ADMIN" />
+		<intercept-url pattern="/pages/rule/**" access="ROLE_ADMIN" />
+		<intercept-url pattern="/pages/user/**"	access="ROLE_ADMIN,ROLE_SUPERVISOR_SSCC,ROLE_SUPERVISOR,ROLE_INSPECTOR" />
+		<intercept-url pattern="/pages/**" access="ROLE_USER, ROLE_ADMIN" />
+		<intercept-url pattern="/**" access="ROLE_USER, ROLE_ADMIN" />
+
+		<!--
+			Uncomment to enable X509 client authentication support <x509 />
+		-->
+		<!--
+			All of this is unnecessary if auto-config="true" <anonymous />
+			<http-basic />
+		-->
+		<!--
+			form-login login-page="/login.xhtml"
+			authentication-failure-url="/login.xhtml?login_error=1"/
+		-->
+		<logout logout-success-url="/login.xhtml" />
+		<!--  <remember-me /> -->
+		<!-- Uncomment to limit the number of sessions a user can have-->
+		<!--
+			<concurrent-session-control max-sessions="1"
+			exception-if-maximum-exceeded="true"/>
+		-->
+	</http>
+	<authentication-provider user-service-ref="userDetailsService">
+		<password-encoder hash="md5" />
+		<!--  <password-encoder  hash="md5" ref="saltSource"/>-->
+	</authentication-provider>
+
+	<!--beans:bean id="shutDownApplication" class="es.ine.web.ShutDownApplication">
+		<beans:property name="sessionRegistry" ref="sessionRegistry"></beans:property>
+	</beans:bean-->
+
+	<beans:bean id="sessionRegistry"
+		class="org.springframework.security.concurrent.SessionRegistryImpl" />
+
+	<beans:bean id="defaultConcurrentSessionController"
+		class="org.springframework.security.concurrent.ConcurrentSessionControllerImpl">
+		<beans:property name="sessionRegistry" ref="sessionRegistry" />
+		<beans:property name="exceptionIfMaximumExceeded"
+			value="true" />
+		<beans:property name="maximumSessions" value="-1" />
+	</beans:bean>
+
+	<beans:bean id="daoAuthenticationProvider"
+		class="org.springframework.security.providers.dao.DaoAuthenticationProvider">
+		<beans:property name="userDetailsService" ref="userDetailsService" />
+		<beans:property name="hideUserNotFoundExceptions" value="false" />
+		<beans:property name="passwordEncoder" ref="passwordEncoder" />
+	</beans:bean>
+
+	<beans:bean id="authenticationManager"
+		class="org.springframework.security.providers.ProviderManager">
+		<beans:property name="providers">
+			<beans:list>
+				<beans:ref local="daoAuthenticationProvider" />
+			</beans:list>
+		</beans:property>
+		<beans:property name="sessionController" ref="defaultConcurrentSessionController" />
+	</beans:bean>
+
+	<beans:bean id="customAuthenticationProcessingFilter"
+		class="org.springframework.security.ui.webapp.AuthenticationProcessingFilter">
+		<custom-filter position="AUTHENTICATION_PROCESSING_FILTER" />
+		<beans:property name="defaultTargetUrl" value="/pages/home.xhtml" />
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="authenticationFailureUrl" value="/login.xhtml?login_error=1" />
+		<beans:property name="allowSessionCreation" value="true" />
+		<beans:property name="serverSideRedirect" value="true" />
+		<beans:property name="alwaysUseDefaultTargetUrl" value="true" />
+	</beans:bean>
+
+	<beans:bean id="myAuthenticationEntryPoint"
+		class="org.springframework.security.ui.webapp.AuthenticationProcessingFilterEntryPoint">
+		<beans:property name="loginFormUrl" value="/login.xhtml" />
+	</beans:bean>
+
+	<beans:bean id="passwordEncoder"
+		class="org.springframework.security.providers.encoding.Md5PasswordEncoder" />
+
+</beans:beans>
+
+

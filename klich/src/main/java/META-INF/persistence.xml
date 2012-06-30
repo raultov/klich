@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="klich" transaction-type="RESOURCE_LOCAL">
+
+	
+		
+
+		<!--
+			Uncomment one of the following to enable a non-default JPA provider
+		-->
+		
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		
+		<!--
+			<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		-->
+		
+
+		<!--
+			Glassfish Default Datasource
+			<jta-data-source>jdbc/__default</jta-data-source>
+		-->
+
+		<!--
+			JBoss Default Datasource
+			<jta-data-source>java:/DefaultDS</jta-data-source>
+		-->
+		<!-- 
+		<jta-data-source>java:/DefaultDS</jta-data-source>
+		 -->
+		 
+		 <class>net.softforlife.klich.model.Geopoint</class>
+		 <class>net.softforlife.klich.model.Track</class>
+		 <class>net.softforlife.klich.model.Tuser</class>
+		 <class>net.softforlife.klich.model.Trole</class>
+		 <class>net.softforlife.klich.model.TuserTrole</class>
+		 <class>net.softforlife.klich.model.Device</class>
+		 <class>net.softforlife.klich.model.I18nMessage</class>
+		 <class>net.softforlife.klich.model.I18nGroup</class>
+		 <class>net.softforlife.klich.model.Language</class>
+		 <class>net.softforlife.klich.model.Status</class>
+		 <class>net.softforlife.klich.model.StatusType</class>
+		 <class>net.softforlife.klich.model.StatusTypeAssign</class>
+		 <class>net.softforlife.klich.model.Notification</class>
+		 <class>net.softforlife.klich.model.NotificationType</class>
+		 <exclude-unlisted-classes>false</exclude-unlisted-classes>
+		
+		<properties>
+			<!-- Properties for Hibernate (default provider for JBoss AS) -->
+			<property name="hibernate.archive.autodetecion" value="class, hbm" />
+			<property name="hibernate.hbm2ddl.auto" value="create" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+			
+			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
+			<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/klich2" />
+			<property name="hibernate.connection.username" value="root" />
+			<property name="hibernate.connection.password" value="bunbury7" />
+			
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+            <property name="hibernate.hbm2ddl.auto" value="create" />		
+            
+			<property name="c3p0.min_size" value="5" />
+			<property name="c3p0.max_size" value="20" />
+			<property name="c3p0.timeout" value="1800" />
+			<property name="c3p0.max_statements" value="50" />
+			<property name="c3p0.idle_test_period" value="10" />
+			<property name="c3p0.acquire_increment" value="10" />
+			<property name="connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />              	
+			
+			<property name="hibernate.transaction.flush_before_completion"
+				value="true" />
+			<property name="hibernate.cache.provider_class" value="org.hibernate.cache.HashtableCacheProvider" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/klich2"/>
+			<property name="javax.persistence.jdbc.user" value="root"/>
+			<property name="javax.persistence.jdbc.password" value="bunbury7"/>
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+			<!--  <property name="hibernate.transaction.manager_lookup_class"
+				value="org.hibernate.transaction.JOTMTransactionManagerLookup" />
+			-->
+			<!-- Properties for EclipseLink (default provider for GlassFish)
+			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
+			<property name="eclipselink.logging.level" value="FINE" />
+ -->
+		</properties>
+
+	</persistence-unit>
+</persistence>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd"> 
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceXmlLocation">
+			<value>classpath*:META-INF/persistence.xml</value>
+		</property>
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory">
+			<ref bean="entityManagerFactory" />
+		</property>
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager" />	
+
+	<!-- JPA annotations bean post processor -->
+	<bean
+		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+	<!-- Exception translation bean post processor -->
+	<bean
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />   
+		
+	<bean id="genericDao" class="net.softforlife.klich.persistence.DAOwithJPA.GenericDAOWithJPA"
+		abstract="true">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>	
+	
+	<bean id="geopointDAO" class="net.softforlife.klich.persistence.DAOwithJPA.GeopointDAOJPA"
+		parent="genericDao" />	
+		
+	<bean id="trackDAO" class="net.softforlife.klich.persistence.DAOwithJPA.TrackDAOJPA"
+		parent="genericDao" />	
+		
+	<bean id="deviceDAO" class="net.softforlife.klich.persistence.DAOwithJPA.DeviceDAOJPA"
+		parent="genericDao" />	
+		
+	<bean id="userDAO" class="net.softforlife.klich.persistence.DAOwithJPA.UserDAOJPA"
+		parent="genericDao" />		
+		
+	<bean id="roleDAO" class="net.softforlife.klich.persistence.DAOwithJPA.RoleDAOJPA"
+		parent="genericDao" />		
+		
+	<bean id="i18nGroupDAO" class="net.softforlife.klich.persistence.DAOwithJPA.I18nGroupDAOJPA"
+		parent="genericDao" />		
+		
+	<bean id="i18nMessageDAO" class="net.softforlife.klich.persistence.DAOwithJPA.I18nMessageDAOJPA"
+		parent="genericDao" />	
+		
+	<bean id="languageDAO" class="net.softforlife.klich.persistence.DAOwithJPA.LanguageDAOJPA"
+		parent="genericDao" />	
+		
+	<bean id="statusDAO" class="net.softforlife.klich.persistence.DAOwithJPA.StatusDAOJPA"
+		parent="genericDao" />												
+      
+</beans>

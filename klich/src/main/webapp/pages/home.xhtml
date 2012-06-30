@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+   	xmlns:ui="http://java.sun.com/jsf/facelets"
+   	xmlns:f="http://java.sun.com/jsf/core"
+   	xmlns:h="http://java.sun.com/jsf/html"
+   	xmlns:c="http://java.sun.com/jstl/core"
+   	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+   	xmlns:t="http://myfaces.apache.org/tomahawk"
+   	xmlns:p="http://primefaces.prime.com.tr/ui"
+   	template="/WEB-INF/templates/template.xhtml" >
+   	<!-- xmlns:m="http://code.google.com/p/gmaps4jsf/" -->
+   	
+	<ui:define name="content">
+	
+	  <h:form id="formMap" class="cssformMap">
+	  
+	    <p:growl id="messageGrowl" life="5000" showDetail="true" />
+	    
+		<!--  40.38634751, -3.64037496    15  -->
+		<p:gmap id="mymap" center="#{mapsBean.approximateCenter}" zoom="#{mapsBean.zoomLevel}" type="roadmap" style="width:775px; height:500px"
+			navigationControl="true" mapTypeControl="true" model="#{mapsBean.model}" widgetVar="tmap" 
+			overlaySelectListener="#{mapsBean.onMarkerSelect}" stateChangeListener="#{mapsBean.onStateChange}" 
+			onOverlaySelectUpdate="sidebarForm" />
+		
+		<script type="text/javascript">
+			circles.clear();
+			var gmap = tmap.getMap();
+			var centerLatLng = null;
+			var circle = null;
+		
+			<ui:repeat value="#{mapsBean.listGeopoints}" var="item">
+				centerLatLng = new google.maps.LatLng(#{item.latitude}, #{item.longitude});  // in the format of lat, lng
+				circle = new google.maps.Circle({
+					center: centerLatLng,
+					fillColor: '#00f',
+					fillOpacity: 0.1,
+					strokeColor: '#00f',
+					strokeOpacity: 0.5,
+					strokeWeight: 1
+				});
+           
+           		var radio = #{item.accuracy} * 1000.0;
+				circle.setRadius(radio);  // return double, which is accuracy in meters
+				circle.setMap(gmap);
+			
+				//circles.push(circle);
+				//circles[#{item.geopointId}] = circle;
+				circles.put(#{item.geopointId}, circle);
+			</ui:repeat>
+		
+			drawArrows(circles);
+		</script>
+		
+		<p:dataTable id="trackTable" style="width:775px;" var="track" value="#{mapsBean.tracks}" paginator="true" rows="5" 
+					widgetVar="jsTrackTable" emptyMessage="No hay ningún track que mostrar">
+		
+			<f:facet name="header">
+				Lista de tracks
+			</f:facet>
+		
+			<p:column sortBy="#{track.date}">
+				<f:facet name="header">
+					<h:outputText value="Fecha" />
+				</f:facet>
+				<h:outputText value="#{track.date}" />
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Renderizar" />
+				</f:facet>
+
+				<p:commandLink value="Renderizar track" actionListener="#{mapsBean.onTrackSelect}" update="messageGrowl, formMap, sidebarForm" >
+					<f:param value="#{track.trackId}" name="trackId" />
+				</p:commandLink>
+				
+			</p:column>			
+			
+			<f:facet name="footer">
+				Hay un total de #{fn:length(mapsBean.tracks)} tracks.
+			</f:facet>
+		</p:dataTable>	
+		
+		<script type="text/javascript">
+			var myRowTrack = document.getElementById('#{mapsBean.htmlIdSelectedTrack}');
+			
+			if (myRowTrack != null) {
+				myRowTrack.childNodes[0].style.backgroundColor = "#FFAA11";
+				myRowTrack.childNodes[1].style.backgroundColor = "#FFAA11";
+			}
+		</script>
+
+		</h:form>
+	</ui:define>
+	
+	<ui:define name="sidebar">
+		<h:form id="sidebarForm">
+		<h1>#{messages.home_sidebar_title}</h1>
+		
+		<ui:fragment rendered="#{!empty mapsBean.geopointSelected.geopointId}">
+			<script type="text/javascript">
+				//var beforeSelectedCircle = circles[#{mapsBean.geopointBeforeSelected.geopointId} - 1];
+				var beforeSelectedCircle = circles.get(#{mapsBean.geopointBeforeSelected.geopointId});
+				
+				var centerLatLng = beforeSelectedCircle.getCenter();
+				var circleOptions = {
+						center: centerLatLng,
+						fillColor: '#00f',
+						fillOpacity: 0.1,
+						strokeColor: '#00f',
+						strokeOpacity: 0.5,
+						strokeWeight: 1
+					}
+				beforeSelectedCircle.setOptions(circleOptions);					
+			
+				//var circle = circles[#{mapsBean.geopointSelected.geopointId} - 1];
+				var circle = circles.get(#{mapsBean.geopointSelected.geopointId});
+				
+				var centerLatLng = circle.getCenter();
+				var circleOptions = {
+						center: centerLatLng,
+						fillColor: '#ff0000',
+						fillOpacity: 0.5,
+						strokeColor: '#00f',
+						strokeOpacity: 0.5,
+						strokeWeight: 1
+					}
+				circle.setOptions(circleOptions);	
+			</script>		
+		</ui:fragment>
+		
+		<table id="selectedG">
+			<tbody>
+				<tr>
+					<td>
+						<h:outputText value="Longitud: " />
+					</td>
+					<td>
+						<h:outputText id="longitudeG" value="#{(empty mapsBean.geopointSelected.longitude) ? ' ' : mapsBean.geopointSelected.longitude}" />					
+					</td>
+				</tr>
+				
+				<tr>
+					<td>
+						<h:outputText value="Latitud: " />
+					</td>
+					<td>
+						<h:outputText id="latitudeG"
+							value="#{(empty mapsBean.geopointSelected.latitude) ? ' ' : mapsBean.geopointSelected.latitude}" />						
+					</td>
+				</tr>				
+
+				<tr>
+					<td>
+						<h:outputText value="Precisión: " />
+					</td>
+					<td>
+						<h:outputText id="accuracyG" 
+							value="#{(empty mapsBean.accuracyGeopointSelectedInMeters) ? ' ' : mapsBean.accuracyGeopointSelectedInMeters}" />
+						<h:outputText id="unitsG" 
+							value="#{(empty mapsBean.accuracyGeopointSelectedInMeters) ? ' ' : ' metros'}" />							
+					</td>
+				</tr>
+				
+				<tr>
+					<td>
+						<h:outputText value="Origen: " />
+					</td>
+					<td>
+						<h:outputText id="sourceG" value="#{(empty mapsBean.geopointSelected.typeGeopoint) ? ' ' : mapsBean.geopointSelected.typeGeopoint.shortDescription}"  />						
+					</td>
+				</tr>
+				
+				<tr>
+					<td>
+						<h:outputText value="Fecha: " />
+					</td>
+					<td>
+						<h:outputText id="dateG" value="#{(empty mapsBean.dateGeopointSelected) ? ' ' : mapsBean.dateGeopointSelected}" />						
+					</td>
+				</tr>
+				
+				<tr>
+					<td>
+						<h:outputText value="Hora: " />
+					</td>
+					<td>
+						<h:outputText id="timeG" value="#{(empty mapsBean.timeGeopointSelected) ? ' ' : mapsBean.timeGeopointSelected}" />						
+					</td>
+				</tr>									
+												
+			</tbody>
+		</table>
+		</h:form>
+	</ui:define>
+	
+	<ui:define name="sidebar2">
+		<h:form id="sidebarForm2">
+			<h1>#{messages.home_sidebar2_title}</h1>
+			
+			<p:dataTable id="deviceTable" var="device" value="#{mapsBean.devices}"  paginator="true" rows="5"
+							paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+							emptyMessage="No hay ningún dispositivo que mostrar">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages.home_devices_title}" />
+					</f:facet>
+					<p:commandLink value="#{device.brand} - #{device.model}" actionListener="#{mapsBean.onDeviceSelect}" update="sidebarForm2, messageGrowl, formMap, sidebarForm" >
+						<f:param value="#{device.deviceId}" name="deviceId" />
+					</p:commandLink>
+
+				</p:column>
+			</p:dataTable>
+			
+			<script type="text/javascript">
+				var myRowDevice = document.getElementById('#{mapsBean.htmlIdSelectedDevice}');
+				
+				if (myRowDevice != null) {
+					myRowDevice.childNodes[0].style.backgroundColor = "#FFAA11";
+				}
+			</script>
+		</h:form>
+	</ui:define>
+	
+</ui:composition>

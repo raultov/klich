@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+    <!-- WS -->
+
+
+    <bean id="sigueDelegacionesService" class="es.ine.ws.service.impl.SigueDelegacionesImpl">
+        <property name="sigueDelegacionesDAO" ref="sigueDelegacionesDAO" />
+        <property name="userService" ref="userService" />
+    </bean>
+
+    <bean id="flatService" class="es.ine.ws.service.impl.FlatServiceImpl">
+        <property name="flatDAO" ref="flatDAO" />
+        <!--property name="sigueProvinciasService" ref="sigueProvinciasService" /-->
+    </bean>
+
+    <bean id="sectionService" class="es.ine.ws.service.impl.SectionServiceImpl">
+        <property name="sectionDAO" ref="sectionDAO" />
+        <property name="flatDAO" ref="flatDAO" />
+        <property name="callsDAO" ref="callsDAO" />
+        <property name="personDAO" ref="personDAO" />
+        <property name="tabletSectionDAO" ref="tabletSectionDAO" />
+        <!--property name="usersAndRolesService" ref="usersAndRolesService" />
+                <property name="userService" ref="userService" />
+                <property name="sigueDelegacionesService" ref="sigueDelegacionesService" /-->
+    </bean>
+
+    <!-- From tich -->
+    <bean id="callsService" class="es.ine.ws.service.impl.CallsServiceImpl">
+        <property name="callsDAO" ref="callsDAO" />
+        <property name="userService" ref="userService" />
+        <!--property name="delegacionesService" ref="sigueDelegacionesService" />-->
+        <property name="userSurveyCallDAO" ref="userSurveyCallDAO" />
+    </bean>
+
+
+
+    <bean id="personService" class="es.ine.ws.service.impl.PersonServiceImpl">
+        <property name="personDAO" ref="personDAO" />
+        <!--property name="callsService" ref="callsService" />
+                <property name="userService" ref="userService" />
+                <property name="questionService" ref="questionService" />
+                <property name="historyService" ref="historyService" /-->
+    </bean>
+
+    <bean id="questionService" class="es.ine.ws.service.impl.QuestionServiceImpl">
+        <property name="answerDAO" ref="answerDAO" />
+        <property name="questionDao" ref="questionDAO" />
+        <property name="posibleAnswerDAO" ref="posibleAnswerDAO" />
+    </bean>
+
+    <bean id="surveyContextManager" class="es.ine.ws.service.impl.SurveyContextManagerImpl">
+        <property name="answerDAO" ref="answerDAO" />
+        <property name="surveyDAO" ref="surveyDAO" />
+        <property name="userService" ref="userService" />
+        <property name="userSurveyDAO" ref="userSurveyDAO" />
+        <property name="personService" ref="personService" />
+    </bean>
+
+    <bean id="userService" class="es.ine.ws.service.impl.UserServiceImpl">
+        <property name="passwordEncoder">
+            <bean
+                class="org.springframework.security.providers.encoding.Md5PasswordEncoder" />
+        </property>
+        <property name="userDAO" ref="userDAO" />
+        <property name="roleDAO" ref="roleDAO" />
+        <!--property name="securityService" ref="securityService" />
+                <property name="tabletService" ref="tabletService" /-->
+    </bean>
+
+    <bean id="surveyService" class="es.ine.ws.service.impl.SurveyServiceImpl">
+        <property name="surveyDao" ref="surveyDAO" />
+        <!--<property name="userSurveyCallDAO" ref="userSurveyCallDAO" />
+                <property name="userSurveyDao" ref="userSurveyDAO" />
+                <property name="userService" ref="userService" />
+                <property name="questionContextBuilder" ref="questionContextBuilder" />
+                <property name="starterChain" ref="validationChain" />
+                <property name="surveyDataService" ref="surveyDataService" />
+                <property name="questionService" ref="questionService" />
+                <property name="surveyContextManager" ref="surveyContextManager" />
+                <property name="messageService" ref="msgService" />
+                <property name="validationService" ref="flawValidationService" />
+                <property name="callsService" ref="callsService" />
+                <property name="personService" ref="personService" /-->
+    </bean>
+
+
+
+    <bean id="appointmentService" class="es.ine.ws.service.impl.AppointmentServiceImpl">
+        <property name="userService" ref="userService" />
+        <property name="callsService" ref="callsService" />
+        <property name="appointmentDAO" ref="appointmentDAO" />
+        <!--property name="parametersBuilder" ref="SCLLParametersBuilder" />
+                <property name="cycleService" ref="cycleService" />
+                <property name="viewMessageService" ref="msgService" /-->
+    </bean>
+
+    <bean name="observationNoteService" class="es.ine.ws.service.impl.ObservationNoteServiceImpl">
+        <property name="callsService" ref="callsService" />
+        <property name="observationNoteDAO" ref="observationNoteDAO" />
+    </bean>
+
+    <bean id="filterService" class="es.ine.ws.service.impl.FilterServiceImpl">
+        <property name="userService" ref="userService" />
+        <property name="callsService" ref="callsService" />
+        <property name="filterDAO" ref="filterDAO" />
+        <!--property name="parametersBuilder" ref="SCLLParametersBuilder" /-->
+    </bean>
+
+    <bean id="configurationWSService" class="es.ine.ws.ConfigurationWSService">
+        <property name="configFileName" value="config.properties" />
+        <property name="excelReaderFileName" value="excelreader.properties" />
+    </bean>
+
+</beans>

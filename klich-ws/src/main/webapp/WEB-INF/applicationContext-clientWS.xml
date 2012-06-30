@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:jaxws="http://cxf.apache.org/jaxws"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+  	http://www.springframework.org/schema/beans/spring-beans.xsd
+  	http://cxf.apache.org/jaxws
+  	http://cxf.apache.org/schemas/jaxws.xsd">
+
+    <!-- Este bean será el cliente del Web Service. Apache CXF generará un
+         cliente que cumpla con la interfaz indicada y que accede al
+         Web Service indicado en el atributo "address". Este bean luego
+         puede inyectarse y utilizarse normalmente como cualquier otro objeto.
+    -->
+
+    
+
+    <bean id="clientWS" class="net.softforlife.klich.ws.KlichWS"
+      factory-bean="clientKlichWSFactory" factory-method="create">
+    </bean>
+
+    <bean id="clientKlichWSFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
+        <property name="serviceClass" value="net.softforlife.klich.ws.KlichWS"/>
+        <property name="address" value="http://localhost:8080/test"/>
+    </bean>
+
+                  
+</beans>
+

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+      http://java.sun.com/xml/ns/javaee
+      http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+
+	<!--application>  
+
+		<message-bundle>messagesJSF</message-bundle>
+		<el-resolver>
+			org.springframework.web.jsf.el.SpringBeanFacesELResolver
+		</el-resolver>
+		<navigation-handler>
+			org.springframework.web.jsf.DelegatingNavigationHandlerProxy
+        </navigation-handler>
+	</application>
+	
+	<lifecycle>
+		<phase-listener>net.softforlife.klich.JSF.web.util.MessageListener</phase-listener>
+	</lifecycle-->
+	
+	<application>
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+		<locale-config>
+		</locale-config>
+		<resource-bundle>
+			<base-name>MessageResources</base-name>
+			<var>messages</var>
+		</resource-bundle>
+	</application>  
+	
+	<!--
+	<application>
+		<view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
+		<message-bundle>messagesJSF</message-bundle>
+		<variable-resolver>
+			org.springframework.web.jsf.DelegatingVariableResolver
+        </variable-resolver>
+		<navigation-handler>
+			org.springframework.web.jsf.DelegatingNavigationHandlerProxy
+        </navigation-handler>
+	</application>	
+	  -->
+ 	<managed-bean>
+  		<managed-bean-name>mapsBean</managed-bean-name>
+  		<managed-bean-class>net.softforlife.klich.JSF.web.beans.MapsBean</managed-bean-class>
+  		<managed-bean-scope>request</managed-bean-scope>
+  		<managed-property>
+			<property-name>geopointService</property-name>
+			<value>#{geopointService}</value>
+		</managed-property>
+  		<managed-property>
+			<property-name>trackService</property-name>
+			<value>#{trackService}</value>
+		</managed-property>		
+ 	</managed-bean> 
+ 	
+ 	 <managed-bean>
+  		<managed-bean-name>notificationsBean</managed-bean-name>
+  		<managed-bean-class>net.softforlife.klich.JSF.web.beans.NotificationsBean</managed-bean-class>
+  		<managed-bean-scope>request</managed-bean-scope>
+  		<managed-property>
+			<property-name>notificationService</property-name>
+			<value>#{notificationService}</value>
+		</managed-property>	
+		<managed-property>
+			<property-name>attemptsMax</property-name>
+			<value>3</value>
+		</managed-property>
+		<managed-property>
+			<property-name>userService</property-name>
+			<value>#{userService}</value>
+		</managed-property>
+		<managed-property>
+			<property-name>propertiesFile</property-name>
+			<value>MessageResources</value>
+		</managed-property>		
+ 	</managed-bean> 	
+ 	
+</faces-config>

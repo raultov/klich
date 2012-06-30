@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	
+
+    <bean id="wsDataLoadService" class="net.softforlife.klich.ws.service.impl.WSDataLoadServiceImpl">
+        <property name="trackService" ref="trackService" />
+        <property name="geopointService" ref="geopointService" />
+    </bean>
+
+    <bean id="wsDataService" class="net.softforlife.klich.ws.service.impl.WSDataServiceImpl">
+        <property name="webServiceDAO" ref="webServiceDAO" />
+        <property name="userDAO" ref="userDAO" />
+        <property name="wsDataLoadService" ref="wsDataLoadService" />
+        <property name="securityService" ref="securityService" />
+        <!-- property name="clientWS" ref="clientWS" />  -->
+        <property name="trackDAO" ref="trackDAO" />
+        <property name="geopointDAO" ref="geopointDAO" />
+        <!-- <property name="provinciasDAO" ref="sigueProvinciasDAO" />  -->
+        <!-- <property name="wsDataSectionService" ref="wsDataSectionService" />  -->
+    </bean>
+    
+    <bean id="wSEmailSender" class="net.softforlife.klich.ws.service.impl.WSEmailSenderImpl" init-method="init" >
+    	<property name="propertiesFile" value="email" />
+    </bean>
+<!--  
+    <bean id="usersAndRolesService" class="es.ine.ws.service.impl.UsersAndRolesServiceImpl">
+        <property name="userDAO" ref="userDAO" />
+        <property name="sigueDelegacionesService" ref="sigueDelegacionesService" />
+    </bean>
+
+    <bean id="wsDataSectionService" class="es.ine.ws.service.impl.WSDataSectionServiceImpl">
+        <property name="tabletSectionDAO" ref="tabletSectionDAO" />
+    </bean>
+    -->
+</beans>

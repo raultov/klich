@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+  	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	<ui:param name="ctx" value="#{facesContext.externalContext.request.contextPath}" />
+      
+<h:head>
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<title>Login - aplicacion de pruebas</title>
+	<link type="text/css" rel="stylesheet" href="#{ctx}/resources/css/screen.css" /> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+	<script src="#{ctx}/resources/js/jquery-1.4.4.min.js" type="text/javascript" />
+	<script src="#{ctx}/resources/js/jquery.dateFormat-1.0.js" type="text/javascript" />
+	<script src="#{ctx}/resources/js/klich.js" type="text/javascript" />
+	
+	<script type="text/javascript">
+		jQuery.noConflict(); 
+	</script>
+</h:head>      
+
+<h:body>
+	<h:panelGroup id="page" layout="block">
+		<h:panelGroup id="header" layout="block">
+			<h1><a href="login.xhtml">klich</a></h1>
+		</h:panelGroup>
+
+		<h:panelGroup id="container" layout="block">
+		
+			<h:panelGroup id="content" layout="block">
+				
+				<form class="loginform" action="#{ctx}/j_spring_security_check" method="post">
+					<div id="formdiv" class="formdiv">
+						<table>
+							<tr>
+								<td>
+									<strong><h:outputText  value="#{messages.login_label_username}" /></strong>
+								</td>
+								<td>
+									<input id="un" type='text' name='j_username' class="input" />
+								</td>
+							</tr>
+							
+							<tr>
+								<td>
+									<strong><h:outputText value="#{messages.login_label_password}" /></strong>
+								</td>
+								<td>
+									<input type="password" class="input" id="password" name="j_password" />
+								</td>
+							</tr>
+							
+							<tr>
+								<td>
+								
+								</td>
+								
+								<td id="remembertag">
+									<input id="remember" type="checkbox" name="_spring_security_remember_me" />
+									<label for="remember">
+										<h:outputText value="#{messages.login_label_rembered}" />
+									</label>
+								</td>
+							</tr>
+						</table>				
+
+						<p id="loginboton">
+							<input class="boton" name="submit" type="submit" value="#{messages.login_button_submit}"/>
+						</p>
+					
+						<div style="margin-top:0px" class="loginSeparator"></div>
+					
+						<div id="loginLicenseContainer">Copyright &copy; #{messages.login_license} <a href="www.softforlife.com" target="_new"> SoftForLife </a> #{messages.login_license_2} </div>
+					
+					</div>
+				</form>
+					
+				<script type="text/javascript">
+				</script>
+			</h:panelGroup>	
+		</h:panelGroup>
+	</h:panelGroup>
+				
+	<br/>
+	<br/>
+</h:body>
+</html>
+
