@@ -14,4 +14,4 @@ public interface DeviceDAO extends GenericDAO<Device, Long> {
 	public void update(Device t);
 	
 	public List<Device> getDevicesByUser(Tuser userId);
-}
+};
